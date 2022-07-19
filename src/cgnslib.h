@@ -1630,6 +1630,47 @@ CGNSDLL int cg_ptset_write(CGNS_ENUMT(PointSetType_t) ptset_type,
 	cgsize_t npnts, const cgsize_t *pnts);
 CGNSDLL int cg_ptset_read(cgsize_t *pnts);
 
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
+ *    TODO:  Read and write Rules Nodes                 					       *
+\* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+CGNSDLL int cg_nrules_collection(int file_number, int B, int *C);
+CGNSDLL int cg_rules_collection_write(int file_number, int B, const char *collectionname, int *C);
+CGNSDLL int cg_rules_collection_read(int file_number, int B, int C, char *collectionname);
+
+CGNSDLL int cg_rules_collection_num_ids_read(int file_number, int B, int C, int* num_ids);
+CGNSDLL int cg_rules_collection_idtoqualifier_read(int file_number, int B, int C,
+                                                   int *rule_ids, const char **rulenames);
+CGNSDLL int cg_rules_collection_idtoqualifier_write(int file_number, int B, int C,
+                                                    int num_ids, int *rule_ids, const char **rulenames);
+
+CGNSDLL int cg_nintegration_rules(int file_number, int B, int C, int* nitgrules);
+
+CGNSDLL int cg_integration_rule_read(int file_number, int B, int C, int R, char *rulename,
+                                              CGNS_ENUMT(ElementType_t) *etype, CGNS_ENUMT(ElementSpace_t) *integration_space,
+                                              int *num_itg_pts, int *num_val,
+                                              CGNS_ENUMT(DataType_t) *datatype);
+
+CGNSDLL int cg_integration_rule_read_data(void* locations, void *weigths);
+
+//CGNSDLL int cg_reference_space_read(CGNS_ENUMT(ElementType_t) etype, CGNS_ENUMT(ElementSpace_t) integration_space,
+//                                    int *num_itg_pts, int *num_val,
+//                                    CGNS_ENUMT(DataType_t) *datatype);
+
+CGNSDLL int cg_integration_rule_parametric_write(int file_number, int B, int C, const char *rulename,
+                                                CGNS_ENUMT(ElementType_t) etype, int num_itg_pts, int num_param,
+                                                CGNS_ENUMT(DataType_t) datatype, void *parameters, void *weights, int *R);
+CGNSDLL int cg_integration_rule_barycentric_write(int file_number, int B, int C, const char *rulename,
+                                                CGNS_ENUMT(ElementType_t) etype, int num_itg_pts, int num_pts,
+                                                CGNS_ENUMT(DataType_t) datatype, void *location_weights, void *weights, int *R);
+
+CGNSDLL int cg_element_association_write(const char* association_name, const char* path, int num_ids, int *data_ids);
+
+CGNSDLL int cg_sol_itg_offset_write(int file_number, int B, int Z, int S, cgsize_t offset_size, CGNS_ENUMT(DataType_t) offset_type, void *offset_data);
+CGNSDLL int cg_offset_write(const char* offset_name, cgsize_t offset_size, CGNS_ENUMT(DataType_t) offset_type, void *offset_data);
+
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
  *      Link Handling Functions - new in version 2.1                     *
 \* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
