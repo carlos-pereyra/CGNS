@@ -224,6 +224,10 @@ const char * ElementTypeName[NofValidElementTypes] =
      "PENTA_33", "PENTA_66", "PENTA_75",
      "HEXA_44", "HEXA_98", "HEXA_125"
     };
+const char * ElementSpaceName[NofValidElementSpaceTypes] =
+    {"Null", "UserDefined",
+     "Parametric", "Barycentric"
+    };
 const char * ZoneTypeName[NofValidZoneTypes] =
     {"Null", "UserDefined",
      "Structured", "Unstructured"
@@ -934,6 +938,10 @@ const char *cg_ElementTypeName(CGNS_ENUMT( ElementType_t )  type)
 {
     return cg_get_name(NofValidElementTypes,ElementTypeName,(int)type);
 }
+const char *cg_ElementSpaceType(CGNS_ENUMT( ElementSpace_t )  type)
+{
+    return cg_get_name(NofValidElementSpaceTypes,ElementSpaceName,(int)type);  
+}
 const char *cg_ZoneTypeName(CGNS_ENUMT( ZoneType_t )  type)
 {
     return cg_get_name(NofValidZoneTypes,ZoneTypeName,(int)type);
@@ -1241,7 +1249,7 @@ int cg_zone_write(int file_number, int B, const char *zonename, const cgsize_t *
             }
         }
     }
-  
+
     index = (int) cgi_map_get_item(base->zonemap, zonename);
     /* */
     if (index != -1) {
@@ -1268,7 +1276,7 @@ int cg_zone_write(int file_number, int B, const char *zonename, const cgsize_t *
         }
         zone = &(base->zone[base->nzones]);
         index = base->nzones;
-        
+
         if (cgi_map_set_item(base->zonemap, zonename, index) != 0) {
             cgi_error("Error while adding zonename %s to zonemap hashtable", zonename);
             return CG_ERROR;

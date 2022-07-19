@@ -296,10 +296,11 @@ typedef enum {
   CGNS_ENUMV( IFaceCenter ) =5,
   CGNS_ENUMV( JFaceCenter ) =6,
   CGNS_ENUMV( KFaceCenter ) =7,
-  CGNS_ENUMV( EdgeCenter ) =8
+  CGNS_ENUMV( EdgeCenter ) =8,
+  CGNS_ENUMV( IntegrationPoint ) =9
 } CGNS_ENUMT( GridLocation_t );
 
-#define NofValidGridLocation 9
+#define NofValidGridLocation 10
 
 extern CGNSDLL const char * GridLocationName[NofValidGridLocation];
 
@@ -686,6 +687,22 @@ extern CGNSDLL const char * ElementTypeName[NofValidElementTypes];
 #endif
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
+ *      Element Space                                                    *
+\* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+typedef enum {
+  CGNS_ENUMV( ElementSpaceNull ) =CG_Null,
+  CGNS_ENUMV( ElementSpaceUserDefined ) =CG_UserDefined,
+  CGNS_ENUMV( Parametric ) =2,
+  CGNS_ENUMV( Barycentric ) =3
+} CGNS_ENUMT( ElementSpace_t );
+
+#define NofValidElementSpaceTypes 4
+
+extern CGNSDLL const char * ElementSpaceName[NofValidElementSpaceTypes];
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
  *      Zone types                                                       *
 \* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
@@ -839,6 +856,7 @@ CGNSDLL const char *cg_ModelTypeName(CGNS_ENUMT( ModelType_t ) type);
 CGNSDLL const char *cg_BCTypeName(CGNS_ENUMT( BCType_t ) type);
 CGNSDLL const char *cg_DataTypeName(CGNS_ENUMT( DataType_t ) type);
 CGNSDLL const char *cg_ElementTypeName(CGNS_ENUMT( ElementType_t ) type);
+CGNSDLL const char *cg_ElementSpaceName(CGNS_ENUMT( ElementSpace_t ) type);
 CGNSDLL const char *cg_ZoneTypeName(CGNS_ENUMT( ZoneType_t ) type);
 CGNSDLL const char *cg_RigidGridMotionTypeName(CGNS_ENUMT( RigidGridMotionType_t ) type);
 CGNSDLL const char *cg_ArbitraryGridMotionTypeName(CGNS_ENUMT( ArbitraryGridMotionType_t ) type);
@@ -897,7 +915,7 @@ CGNSDLL int cg_node_family_read( int F, char* family_name, int* nFamBC, int *nGe
 CGNSDLL int cg_node_family_name_write( const char* node_name, const char* family_name );
 CGNSDLL int cg_node_nfamily_names( int* nnames );
 CGNSDLL int cg_node_family_name_read(int N, char* node_name, char* family_name );
-  
+
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - *\
  *      Read and write FamilyName_t Nodes                                *
 \* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
