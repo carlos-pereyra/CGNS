@@ -1,0 +1,186 @@
+CGNS version 4.3.0
+=================================
+
+INTRODUCTION
+------------
+
+This document describes the difference between CGNS 4.2.0 and
+CGNS 4.3.0 and contains information on known problems in
+CGNS 4.3.0.
+
+Links to the CGNS current released source code can be found at:
+
+http://cgns.org/download.html
+
+User documentation for the current release can be found at:
+
+http://cgns.org/CGNS_docs_current/midlevel/index.html
+
+For more information, see the CGNS home page:
+
+http://cgns.org
+
+CONTENTS
+--------
+
+    * New Features
+    * Bug Fixes since CGNS 4.2.0
+    * Known Problems
+
+New Features
+============
+
+    Configuration:
+    --------------
+    N/A
+
+    Library:
+    --------
+    N/A
+
+    Parallel Library:
+    -----------------
+    N/A
+
+    Fortran Library:
+    ----------------
+    N/A
+
+    Tools:
+    ------
+    N/A
+
+Bug Fixes since CGNS 4.1.2 release
+==================================
+
+    Library:
+    --------
+    * Add a context structure to handle cleanly cgio/hdf5 state, CGNS-247
+    * When opening a CGNS file with MLL the whole file is parsed. Moreover, the zone is sorted alphabetically. The new read pattern proposed relies on a qsort algorithm to sort the zone by name. It also adds a small "_children_t vector" to cache node data read during base node parsing. Thus, it should prevent multiple small reads and be more efficient PR #263
+    * Fix bad cast in parallel test, PR #264
+    * Add some missing macros PR #265
+    * Added Timing stats to make tests PR #293
+    * Fixed conflicts with struct stat that comes in sys/stat.h header with MSVC. Older compilers may have other things, but it is just not valid to do it without more sophisticated checks, PR #303
+    * CMake fortran compatibility issue CGNS-10 was addressed by adding add_library(cgns_f2c OBJECT cgns_f.F90), CGNS-10. PR #307
+    * Fix an uninitialized local array by copying m_dimvals to dimvals. Indeed, m_dimvals[:] should be 0. However, the argument passed to H5Screate_simple() is dimvals, which is an uninitialized local array. PR #310
+    * Set the default file_type in cg_open only when in write mode, PR #311 , CGNS-266
+    * Remove unneeded file access check in cgnslib layer, PR #312
+    * Use intel headers instead of msvc PR #314
+    * Added src/Test_UserGuideCode/C_code_parallel autotool's build and tests. Fixed issues with C examples,PR #318 CGNS-260
+    * Multiplication result converted to larger type fixes PR #319
+    * Misc. LGTM fixes PR #328
+    * Fixed misc. Codacy reported errors, PR #330
+    * Basic detection of duplicate face indices in NFaces (Thanks to BETA CAE) PR #331 and PR #335
+    * Fixed clang -Wstrict-prototypes warnings PR #332
+
+    Fortran:
+    --------
+
+    * Fixed all the missing scope enumerations in the Fortran tests, which lead to getting rid of the fixed formatting, reworked CONCATENATE to work with gfortran (see cgnstypes_f03.h.in), CGNS-249, PR #267
+    * Fortran tests/examples clean-up, fixed typo and removed remaining numbered DO loops, CGNS-249, PR #268
+    * Fixed Base/Zone formatted donorname are not managed, CGNS-261, PR #322
+
+    Configuration:
+    --------------
+
+    * CMake fixes for CGNS-256, CGNS-257, CGNS-258 PR#292
+    * Remove the use of Relative paths in LINK_DIRECTORIES, CGNS-163
+    * Replaced #ifdef JFC_PATCH_2015_2 with cg_configure options, CGNS-244 PR #270
+    * Keep default library name on MinGW, PR #271
+    * Modernize CGNS cmake , PR #317
+    * Checks if HDF5 supports parallel I/O if parallel is enabled in CGNS #321, PR #321
+
+   Tools:
+   ------
+    * cgns_info was not installed fixed, CGNS-257
+
+Known Problems
+==============
+
+************ FORTRAN ************
+
+    * A gfortran bug in version 10.2 broke Fortran mapping and caused cg_goto_f
+    to segfault. All other versions of gfortran are suitable.
+    (ref. CGNS-246, GNU BUG 100149)
+
+    * A bug in gfortran (all versions) causes cg_configure_f to fail,
+    GNU BUG 99982. Other Fortran compilers are fine.
+
+************ FORTRAN END ********
+
+************ CGNSVIEW ************
+
+    * cgnsview for OSX is not viewing properly and cgnsview under Windows
+    may fail to compile due to tcl/tk incompatibility.
+
+************ CGNSVIEW END ********
+
+    * For other issues, see https://cgnsorg.atlassian.net
+
+Supported Platforms
+===================
+The following platforms are supported and have been tested for this release.
+They are built with the configure process unless specified otherwise.
+
+    Linux 3.10.0-1127.10.1.el7    gcc (GCC) 4.8.5 20150623 (Red Hat 4.8.5-39)
+    #1 SMP ppc64 GNU/Linux        g++ (GCC) 4.8.5 20150623 (Red Hat 4.8.5-39)
+    (echidna)                     GNU Fortran (GCC) 4.8.5 20150623 (Red Hat 4.8.5-39)
+
+    Linux 2.6.32-573.18.1.el6     IBM XL C/C++ V13.1
+    #1 SMP ppc64 GNU/Linux        IBM XL Fortran V15.1
+    (ostrich)                     
+
+    Linux 3.10.0-327.10.1.el7     GNU C (gcc), Fortran (gfortran), C++ (g++)
+    #1 SMP x86_64 GNU/Linux       compilers:
+    (jelly/kituo/moohan)          Version 4.8.5 20150623 (Red Hat 4.8.5-39)
+                                     Versions 4.9.3, 5.3.0, 6.3.0, 7.2.0
+                                              8.3.0, 9.1.0, 10.1.0
+                                  Intel(R) C (icc), C++ (icpc), Fortran (icc)
+                                  compilers:
+                                     Version 17.0.0.098 Build 20160721
+                                  MPICH 3.3 compiled with GCC 7.2.0
+                                  OpenMPI 4.0.0 compiled with GCC 7.2.0
+                                  NAG Fortran Compiler Release 7.0(Yurakuchho) Build 7011
+
+    SunOS 5.11 11.4.5.12.5.0      Sun C 5.15 SunOS_sparc 2017/05/30
+    32- and 64-bit                Studio 12.6 Fortran 95 8.8 SunOS_sparc 2017/05/30
+    (hedgehog)                    Sun C++ 5.15 SunOS_sparc 2017/05/30
+
+    Windows 10 x64                Visual Studio 2015 w/ Intel Fortran 18 (cmake)
+                                  Visual Studio 2017 w/ Intel Fortran 19 (cmake)
+                                  Visual Studio 2019 w/ Intel Fortran 19 (cmake)
+                                  Visual Studio 2019 w/ MSMPI 10.1 (cmake)
+
+    macOS High Sierra 10.13.6     Apple LLVM version 10.0.0 (clang-1000.10.44.4)
+    64-bit                        gfortran GNU Fortran (GCC) 6.3.0
+    (bear)                        Intel icc/icpc/ifort version 19.0.4.233 20190416
+
+    macOS Mojave 10.14.6          Apple LLVM version 10.0.1 (clang-1001.0.46.4)
+    64-bit                        gfortran GNU Fortran (GCC) 6.3.0
+    (bobcat)                      Intel icc/icpc/ifort version 19.0.4.233 20190416
+
+Tested Configuration Features Summary
+=====================================
+
+    In the table below
+          y   = tested
+          n   = not tested in this release
+          x   = not working in this release
+
+|               Platform               | C | C[1] | Fortran | Fortran [1]|
+|--------------------------------------|---|------|---------|------------|
+| SunOS 5.11 32-bit                    | y |  n   |   y     |    n       |
+| SunOS 5.11 64-bit                    | y |  n   |   y     |    n       |
+| Windows 10                           | y |  n   |   n     |    n       |
+| Windows 10 x64                       | y |  n   |   n     |    n       |
+| Windows 10 Cygwin                    | n |  n   |   x     |    n       |
+| Mac OS X El Capitan 10.11.6 64-bit   | y |  n   |   y     |    n       |
+| Mac OS Sierra 10.12.6 64-bit         | y |  n   |   y     |    n       |
+| Mac OS X High Sierra 10.13.6 64-bit  | y |  n   |   y     |    n       |
+| Mac OS X Mojave 10.14.6 64-bit       | y |  n   |   y     |    n       |
+| CentOS 7.2 Linux 3.10.0 x86_64 PGI   | y |  n   |   y     |    n       |
+| CentOS 7.2 Linux 3.10.0 x86_64 GNU   | y |  y   |   y     |    y       |
+| CentOS 7.2 Linux 3.10.0 x86_64 Intel | y |  y   |   y     |    y       |
+| Linux 2.6.32-573.18.1.el6.ppc64      | y |  n   |   y     |    n       |
+
+[1] Parallel
